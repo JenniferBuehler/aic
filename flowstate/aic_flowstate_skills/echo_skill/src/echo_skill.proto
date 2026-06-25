@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package b_robotized.flowstate;
+
+// Inputs for the echo skill (shown in the Flowstate node properties panel).
+message EchoSkillParams {
+  // Message to echo back. The skill appends a server-side timestamp to it.
+  string message = 1;
+}
+
+// Outputs of the echo skill (lands on the process blackboard).
+message EchoSkillResult {
+  // The input message with " | echoed @ <server RFC3339 timestamp>" appended.
+  string echoed_message = 1;
+}

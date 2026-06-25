@@ -1,0 +1,28 @@
+id {
+  package: "b_robotized.flowstate"
+  name: "echo_skill"
+}
+display_name: "Echo Skill"
+vendor {
+  display_name: "B-Robotized"
+}
+documentation {
+  description: "Minimal demo skill: returns the input message with a server-side timestamp appended. Used to validate the skill author/build/deploy/run loop in a Flowstate process."
+}
+options {
+  supports_cancellation: true
+  cc_config {
+    create_skill: "::EchoSkill::CreateSkill"
+  }
+}
+dependencies {
+}
+parameter {
+  message_full_name: "b_robotized.flowstate.EchoSkillParams"
+  default_value: {
+    type_url: "type.googleapis.com/b_robotized.flowstate.EchoSkillParams"
+  }
+}
+return_type {
+  message_full_name: "b_robotized.flowstate.EchoSkillResult"
+}
