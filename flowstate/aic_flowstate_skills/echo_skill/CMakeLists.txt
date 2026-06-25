@@ -58,3 +58,13 @@ install(
   TARGETS echo_skill_main
   DESTINATION lib/${PROJECT_NAME}
 )
+
+# Offline unit test of the skill's core logic (echo_logic.h) — gtest only, no
+# cloud / SDK test framework. (The SDK's C++ SkillTestFactory ships header-only
+# in intrinsic_sdk_cmake here, so it isn't linkable; see echo_skill_test.cc.)
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(echo_skill_test src/echo_skill_test.cc)
+  target_include_directories(echo_skill_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+  target_link_libraries(echo_skill_test absl::strings absl::time)
+endif()

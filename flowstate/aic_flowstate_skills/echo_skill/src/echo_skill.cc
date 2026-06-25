@@ -5,9 +5,8 @@
 
 #include "absl/log/log.h"
 #include "absl/status/statusor.h"
-#include "absl/strings/str_cat.h"
 #include "absl/time/clock.h"
-#include "absl/time/time.h"
+#include "echo_logic.h"
 #include "echo_skill.pb.h"
 #include "intrinsic/skills/cc/skill_utils.h"
 #include "intrinsic/skills/proto/skill_service.pb.h"
@@ -27,12 +26,11 @@ absl::StatusOr<std::unique_ptr<google::protobuf::Message>> EchoSkill::Execute(
     const ExecuteRequest& request, ExecuteContext& /*context*/) {
   INTR_ASSIGN_OR_RETURN(auto params, request.params<EchoSkillParams>());
 
-  // Server-side timestamp proves the skill actually ran on the cloud side
-  // (it can't be faked by the caller).
-  const std::string timestamp =
-      absl::FormatTime(absl::RFC3339_full, absl::Now(), absl::UTCTimeZone());
-  const std::string echoed =
-      absl::StrCat(params.message(), " | echoed @ ", timestamp);
+  // Core logic lives in echo_logic.h so it can be unit-tested offline.
+  // The server-side timestamp proves the skill actually ran in the cloud (the
+  // caller can't fake it).
+  const std::string echoed = b_robotized::echo_skill::BuildEchoedMessage(
+      params.message(), absl::Now());
 
   LOG(INFO) << "EchoSkill executed; echoed_message=\"" << echoed << "\"";
 
